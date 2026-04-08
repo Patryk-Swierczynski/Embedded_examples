@@ -12,7 +12,10 @@ void displayNibbles(uint32_t number){
     }
     printf("\n");
 }
-
+uint32_t setNBitsNextToEachOther(uint8_t numberOfBits, uint8_t startingPosition) {
+	uint32_t ret=((1<<numberOfBits)-1)<<startingPosition;
+	return ret;
+}
 
 int main(void) {
     const int FN = 3;
