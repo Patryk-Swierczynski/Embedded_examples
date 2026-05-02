@@ -1,3 +1,5 @@
+#ifndef DEFS_H
+#define DEFS_H
 #include <stdint.h>
 struct bits32_t {
 	uint32_t f0 : 2;
@@ -34,17 +36,19 @@ struct bits16_t {
 	uint32_t f13 : 1;
 	uint32_t f14 : 1;
 	uint32_t f15 : 1;
-}
+};
+
 union abc {
 	struct bits32_t field;
 	uint32_t value;
-}
+};
 
 
 union cba {
 	struct bits16_t field;
 	uint32_t value;
-}
+};
+
 #define GPIOA_START 0x48000000
 #define GPIOA_END 0x480003ff
 
@@ -240,7 +244,7 @@ typedef struct {
 	uint8_t BR13 :1;
 	uint8_t BR14 :1;
 	uint8_t BR15 :1;
-} GPIOX_BSRR_t;
+} GPIOx_BSRR_t;
 
 typedef struct {
 	uint8_t LCK0 :1;
@@ -262,7 +266,7 @@ typedef struct {
 	uint8_t LCK16 :1;
 	uint8_t Reserved0 :7;
 	uint8_t Reserved1;
-} GPIOX_LCKR_t;
+} GPIOx_LCKR_t;
 
 typedef struct {
 	uint8_t AFSEL0 : 4;
@@ -362,17 +366,18 @@ typedef union {
 } GPIOX_u;
 
 
-GPIOX_u GPIOA = GPIOA_START;
-GPIOX_u GPIOB = GPIOB_START;
-GPIOX_u GPIOC = GPIOC_START;
-GPIOX_u GPIOD = GPIOD_START;
-GPIOX_u GPIOE = GPIOE_START;
-GPIOX_u GPIOF = GPIOF_START;
-GPIOX_u GPIOG = GPIOG_START;
-GPIOX_u GPIOH = GPIOH_START;
-GPIOX_u GPIOI = GPIOI_START;
+GPIOX_u * GPIOA = (GPIOX_u *)GPIOA_START;
+GPIOX_u * GPIOB = (GPIOX_u *)GPIOB_START;
+GPIOX_u * GPIOC = (GPIOX_u *)GPIOC_START;
+GPIOX_u * GPIOD = (GPIOX_u *)GPIOD_START;
+GPIOX_u * GPIOE = (GPIOX_u *)GPIOE_START;
+GPIOX_u * GPIOF = (GPIOX_u *)GPIOF_START;
+GPIOX_u * GPIOG = (GPIOX_u *)GPIOG_START;
+GPIOX_u * GPIOH = (GPIOX_u *)GPIOH_START;
+GPIOX_u * GPIOI = (GPIOX_u *)GPIOI_START;
 
-#define AHB2ENR_START 0x40021000+0x4C
+#define AHB2ENR_START (0x40021000+0x4C)
 /* najmłodszy bit to zegar portu GPIOA, każdy kolejny to B,C,..,I
  * pod ten adres można wpisać po prostu 0x9 i zapomnieć (włączy zegary wszystkich portów GPIO) */
 
+#endif // DEFS_H
