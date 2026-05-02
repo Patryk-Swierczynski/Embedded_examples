@@ -65,6 +65,13 @@ union cba {
 #define GPIOI_START 0x48002000
 #define GPIOI_END 0x480023ff
 
+typedef enum {
+	MODE_INPUT = 0U,
+	MODE_GP,
+	MODE_AF,
+	MODE_ANALOG
+} GPIO_MODE_SELECTION_t;
+
 typedef struct {
 	uint8_t MODE0 : 2;
 	uint8_t MODE1 : 2;
@@ -83,6 +90,11 @@ typedef struct {
 	uint8_t MODE14 : 2;
 	uint8_t MODE15 : 2;
 } GPIOx_MODER_t;
+
+typedef enum {
+	OTYPE_PUSH_PULL = 0U,
+	OTYPE_OPEN_DRAIN
+} GPIO_OTYPE_SELECTION_t;
 
 typedef struct {
 	uint8_t OT0 :1;
@@ -104,6 +116,13 @@ typedef struct {
 	uint8_t Reserved[2];
 } GPIOx_OTYPER_t;
 
+typedef enum {
+	OSPEED_LOW = 0U,
+	OSPEED_MEDIUM,
+	OSPEED_HIGH,
+	OSPEED_VERY_HIGH
+} GPIO_OSPEED_SELECTION_t;
+
 typedef struct {
 	uint8_t OSPEED0 : 2;
 	uint8_t OSPEED1 : 2;
@@ -122,6 +141,13 @@ typedef struct {
 	uint8_t OSPEED14 : 2;
 	uint8_t OSPEED15 : 2;
 } GPIOx_OSPEEDR_t ;
+
+typedef enum {
+	PUPD_NO_PULLING = 0U,
+	PUPD_PULL_UP,
+	PUPD_PULL_DOWN,
+	RESERVED //do not use!
+} GPIO_PUPD_SELECTION_t;
 
 typedef struct {
 	uint8_t PUPD0 : 2;
@@ -314,4 +340,39 @@ typedef struct {
 	GPIOx_BRR_t br;
 	GPIOx_ASCR_t asc;
 } GPIOx_t;
+
+typedef struct {
+	uint32_t mode;
+	uint32_t otype;
+	uint32_t ospeed;
+	uint32_t pupd;
+	uint32_t id;
+	uint32_t od;
+	uint32_t bsr;
+	uint32_t lck;
+	uint32_t afrl;
+	uint32_t afrh;
+	uint32_t br;
+	uint32_t asc;
+} GPIOx_v;
+
+typedef union {
+	GPIOx_t structure;
+	GPIOx_v value;
+} GPIOX_u;
+
+
+GPIOX_u GPIOA = GPIOA_START;
+GPIOX_u GPIOB = GPIOB_START;
+GPIOX_u GPIOC = GPIOC_START;
+GPIOX_u GPIOD = GPIOD_START;
+GPIOX_u GPIOE = GPIOE_START;
+GPIOX_u GPIOF = GPIOF_START;
+GPIOX_u GPIOG = GPIOG_START;
+GPIOX_u GPIOH = GPIOH_START;
+GPIOX_u GPIOI = GPIOI_START;
+
+#define AHB2ENR_START 0x40021000+0x4C
+/* najmłodszy bit to zegar portu GPIOA, każdy kolejny to B,C,..,I
+ * pod ten adres można wpisać po prostu 0x9 i zapomnieć (włączy zegary wszystkich portów GPIO) */
 
