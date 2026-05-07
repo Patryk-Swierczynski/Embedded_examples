@@ -1,0 +1,51 @@
+Q: Moja płytka została zablokowana programem który wgrałem/am i nie mogę wgrać nic innego.
+A:
+1. Należy otworzyć terminal w folderze projektu
+2. trzymać RESET na płytce
+3. wklepać:
+openocd \
+-f interface/stlink.cfg \
+-f target/stm32l4x.cfg \
+-c "reset_config srst_only connect_assert_srst"
+
+
+4. powinno  być widać coś takiego:
+Open On-Chip Debugger 0.12.0
+Licensed under GNU GPL v2
+For bug reports, read
+        http://openocd.org/doc/doxygen/bugs.html
+Info : auto-selecting first available session transport "hla_swd". To override use 'transport select <transport>'.
+Info : The selected transport took over low-level target control. The results might differ compared to plain JTAG/SWD
+srst_only separate srst_nogate srst_open_drain connect_assert_srst
+
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : clock speed 500 kHz
+Info : STLINK V2J47M34 (API v2) VID:PID 0483:374B
+Info : Target voltage: 3.202089
+Info : [stm32l4x.cpu] Cortex-M4 r0p1 processor detected
+Info : [stm32l4x.cpu] target has 6 breakpoints, 4 watchpoints
+Info : starting gdb server for stm32l4x.cpu on 3333
+Info : Listening on port 3333 for gdb connections
+                         ^^^^^^^
+
+5. można puścić RESET
+
+
+6. otworzyć drugi terminal i wklepać:
+arm-none-eabi-gdb Ścieżka/do/executabli.elf
+(to powinien być program który wcześniej nie sprawiał problemów, a nie ten zepsuty)
+
+7. odpali się debugger gdb. wklepać po kolei
+target extended-remote localhost:3333 <Enter>
+monitor reset halt <Enter>
+load <Enter>
+monitor reset <Enter>
+continue <Enter>
+8. powinien zacząć działać dobry program
+9. płytka jest naprawiona
+
+#######
+Na przyszłość nie dotykać GPIO PA13 i GPIO PA14.
+One są odpowiedzialne za kommunikację debuggera SWD.
+#######
