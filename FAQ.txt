@@ -1,3 +1,12 @@
+Lista rzeczy do zrobienia przed rozpoczęciem programu:
+0. Koniecznie zachowaj kolejność
+1. Włącz zegary portu GPIO
+2. Wybierz funkcję alternatywną jeśli dotyczy
+3. Ustaw tryb GPIO
+4. Dopiero potem można konfigurować resztę (np. LPUART)
+
+
+
 Q: Moja płytka została zablokowana programem który wgrałem/am i nie mogę wgrać nic innego.
 A:
 1. Należy otworzyć terminal w folderze projektu
