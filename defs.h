@@ -14,7 +14,7 @@
 
 typedef enum {
 	MODE_INPUT = 0U,
-	MODE_GP,
+	MODE_GP_OUTPUT,
 	MODE_AF,
 	MODE_ANALOG
 } GPIO_MODE_SELECTION_t;
@@ -319,10 +319,13 @@ volatile GPIOx_u * GPIOG_t = (GPIOx_u *)GPIOG_START;
 volatile GPIOx_u * GPIOH_t = (GPIOx_u *)GPIOH_START;
 volatile GPIOx_u * GPIOI_t = (GPIOx_u *)GPIOI_START;
 
-#define AHB2ENR_START (volatile uint32_t*)(0x40021000+0x4C)
+#define AHB2ENR_START (0x40021000)
+#define AHB2ENR_CLOCK (volatile uint32_t*)(AHB2ENR_START+0x4C)
+
 /* najmłodszy bit to zegar portu GPIOA, każdy kolejny to B,C,..,I
  * pod ten adres można wpisać po prostu 0b111111111 i zapomnieć (włączy zegary wszystkich portów GPIO) */
 
+#define RCC_START 0x40021000u
 #define RCC_POWER (volatile uint32_t *)(0x40021058)
 #define PWR_CR2 (volatile uint32_t *)(0x40007004)
 
@@ -351,6 +354,75 @@ typedef enum {
 	GPIO_PIN_RESET_my=0U,
 	GPIO_PIN_SET_my
 } GPIO_PIN_STATE_t;
+
+
+#define CR1_CEN (1U<<0U)
+#define CR1_UDIS (1U<<1U)
+#define CR1_URS (1U<<2U)
+#define CR1_OPM (1U<<3U)
+#define CR1_ARPE (1U<<7U)
+#define CR1_UIFREMA (1U<<11U)
+
+#define DIER_UIE (1U<<0U)
+#define DIER_UDE (1U<<8U)
+
+#define SR_UIF (1U<<0U)
+#define EGR_UG (1U<<0U)
+#define CNT_UIFCP_OR_RES (1U<<31U)
+
+typedef struct {
+	volatile uint32_t cr1;
+	volatile uint32_t cr2;
+	volatile uint32_t reserved1;
+	volatile uint32_t dier;
+	volatile uint32_t sr;
+	volatile uint32_t egr;
+	volatile uint32_t reserved2;
+	volatile uint32_t reserved3;
+	volatile uint32_t reserved4;
+	volatile uint32_t cnt;
+	volatile uint32_t psc;
+	volatile uint32_t arr;
+} TIMx_t;
+
+#define TIM6_START 0x40001000u
+
+volatile TIMx_t *TIM6_t = (TIMx_t *)TIM6_START;
+
+
+#define RCC_APB1ENR_TIM6EN (1u<<4u)
+#define RCC_APB1ENR ((volatile uint32_t*) (0x40021000u + 0x58u))
+
+typedef struct {
+	volatile uint32_t cr1;
+	volatile uint32_t cr2;
+	volatile uint32_t cr3;
+	volatile uint32_t brr;
+	volatile uint32_t reserved1[2];
+	volatile uint32_t rqr;
+	volatile uint32_t isr;
+	volatile uint32_t icr;
+	volatile uint32_t rdr;
+	volatile uint32_t tdr;
+} volatile LPUARTx_t;
+#define LPUART1_START 0x40008000u
+
+#define RE (1u<<2)
+#define TE (1u<<3)
+#define UE (1u<<0)
+
+#define TC (1u<<6)
+#define TXE (1u<<7)
+
+
+//#define WORDLEN8 ()
+//#define PARITYCONTROL ()
+//#define PARITYSELECTION ()
+//#define PARITYINTERRUPT ()
+
+#define RCC_APB1ENR2 ((volatile uint32_t*) (0x40021000u + 0x5Cu))
+
+volatile LPUARTx_t *LPUART1_t = (LPUARTx_t *)LPUART1_START;
 
 
 #endif // DEFS_H
